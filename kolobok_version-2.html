@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolobok Game</title>
+    <style>
+    .container {
+        width: 800px;
+        height: 500px;
+        margin: 0 auto;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    button {
+        color: white;
+        padding: 10px 30px;
+        margin-top: 15px;
+        border-radius: 2px;
+    }   
+    .shop {
+        background-color: #d25151;
+        border: 2px solid #d25151;
+    }
+
+    .hare {
+        background-color: #65b9f1;
+        border: 2px solid #65b9f1;
+    }
+    .wolf {
+        background-color: #505558;
+        border: 2px solid #505558;
+    }
+    .bear {
+        background-color: #7a4b15;
+        border: 2px solid #7a4b15;
+    }
+    .fox {
+        background-color: #d6801e;
+        border: 2px solid #d6801e;
+    }
+    .specification {
+        background-color: #3cbb58;
+        border: 2px solid #3cbb58;
+    }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Игра "Спасти Колобка"</h1>
+        <div><button class="shop" onclick="purchase()">Магазин</button></div>
+        <div><button class="hare" onclick="fight(hare)">Бой с Зайцем</button></div>
+        <div><button class="wolf" onclick="fight(wolf)">Бой с Волком</button></div>
+        <div><button class="bear" onclick="fight(bear)">Бой с Медведем</button></div>
+        <div><button class="fox" onclick="fight(fox)">Бой с Лисой</button></div>
+        <div><button class="specification" onclick="kolobok.showInfo()">Характеристики</button></div>
+    </div>
+
+    
+    
+
+
+
+    <script>
+
+        alert ("Помоги колобку побороть противников");
+
+        // Персонажи
+
+        let kolobok = {
+            name: "Колобок",
+            hit: 5,
+            health: 10,
+            gold: 0,
+            showInfo () {
+                alert ("Удары " + kolobok.hit + ", Здоровье " + kolobok.health + ", Золото " + kolobok.gold);
+            }
+        }
+
+        let hare = {
+            name: "Заяц",
+            hit: 3,
+            health: 10,
+            gold: 6,
+        }
+
+        let wolf = {
+            name: "Волк",
+            hit: 6,
+            health: 10,
+            gold: 8,
+        }
+
+        let bear = {
+            name: "Медведь",
+            hit: 8,
+            health: 10,
+            gold: 10,
+        }
+
+        let fox = {
+            name: "Лиса",
+            hit: 10,
+            health: 10,
+            gold: 12,
+        }
+        
+        // Магазин
+
+        let products = [
+            {
+                display_name: "Удары",
+                name: "hit",
+                price: 2,
+                ordered: 0
+            },
+            {
+                display_name: "Здоровье",
+                name: "health",
+                price: 3,
+                ordered: 0
+            }
+        ];
+
+        // Функция сражения - через  цикл for
+
+
+        let character;
+        function fight (character) {
+            if (character.name != "Лиса") {
+                for (var i = 0; i < character.hit; i++);
+                for (var j = 0; j < kolobok.hit; j++);
+                    kolobok.hit -= 1;
+                    character.hit -= 1;
+                    if (i == j) {
+                    alert ("Ничья!");
+                    kolobok.health -= 1;
+                    } else if (i < j) {
+                        alert (character.name + " повержен");
+                        kolobok.health *= 2;
+                        kolobok.gold += character.gold;
+                    } else { alert ("Колобок повержен!");
+                        kolobok.health /= 2;
+                        kolobok.gold = 0;
+                    } 
+            } else bossFight ();
+        }
+
+        //Сражение с боссом
+        function bossFight () {
+
+            for (var i = 0; i < fox.hit; i++);
+            for (var j = 0; j < kolobok.hit; j++);
+            if (i < j) {
+                alert (fox.name + " повержен  \nКолобок победил всех врагов");
+                } else { 
+                    confirm ("Колобок повержен! \nКонец игры. Начать игру сначала");
+
+                  kolobok.hit = 5; kolobok.health = 10; kolobok.gold = 0;
+            }
+        }
+
+        // Функция покупки
+
+        function purchase () {
+            for (let index = 0; index < products.length; index++) {
+                const displayName = products[index].display_name;
+                const name = products[index].name;
+                const price = products[index].price;
+                products[index].ordered = +prompt(`Укажите количество продукта ${displayName}, цена ${price}`, 0);
+            }
+
+            let totalPrice = 0;
+            for (let index = 0; index < products.length; index++) {
+                totalPrice += products[index].price * products[index].ordered;
+                kolobok[products[index].name] += products[index].ordered;
+            }
+
+            if (totalPrice == 0) {
+                return alert("Вы ничего не купили.");
+                
+            } else if (totalPrice <= kolobok.gold){
+                kolobok.gold -= totalPrice;
+                return alert("Покупка успешна.");
+                
+            } else {
+                return alert("У вас недостаточно золота.");
+            }
+            
+        }
+
+    </script>
+</body>
+
+</html>
